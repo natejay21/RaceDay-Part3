@@ -1,0 +1,49 @@
+﻿@model RaceDay.MVC.Models.EventViewModel
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-danger text-white"><h4 class="mb-0">Create New Event</h4></div>
+            <div class="card-body">
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger">@TempData["Error"]</div>
+                }
+
+                <form asp-action="Create" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Event Name</label>
+                        <input asp-for="EventName" class="form-control" required />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Event Date</label>
+                            <input asp-for="EventDate" type="datetime-local" class="form-control" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Location</label>
+                            <input asp-for="Location" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Event Type</label>
+                        <select asp-for="EventType" class="form-select">
+                            <option value="Run">Run</option>
+                            <option value="Cycle">Cycle</option>
+                            <option value="Triathlon">Triathlon</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea asp-for="Description" class="form-control" rows="3" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-race w-100">Create Event</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

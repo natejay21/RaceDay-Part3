@@ -1,0 +1,78 @@
+﻿@model RaceDay.MVC.Models.EventViewModel
+
+@{
+    ViewData["Title"] = Model.EventName;
+    var role = Context.Session.GetString("Role");
+    var token = Context.Session.GetString("Token");
+}
+
+<!-- Alert Messages for Enrolment Success/Error -->
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow border-0 mb-4">
+            <div class="card-body p-4">
+                <h1 class="display-5 fw-bold text-danger">@Model.EventName</h1>
+                <h4 class="text-muted mb-3">@Model.EventType | @Model.Location</h4>
+                <p class="lead mt-4">@Model.Description</p>
+                <hr />
+                <p class="fs-5"><strong>📅 Date:</strong> @Model.EventDate.ToString("dd MMMM yyyy")</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow border-0 bg-light">
+            <div class="card-header bg-danger text-white fw-bold">
+                Available Categories
+            </div>
+            <div class="card-body p-0">
+                @if (Model.Categories != null && Model.Categories.Any())
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var cat in Model.Categories)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                <div>
+                                    <strong>@cat.CategoryName</strong><br />
+                                    <small class="text-muted">@cat.DistanceKM km | R @cat.EntryFee</small>
+                                </div>
+
+                                @if (role == "Participant" && token != null)
+                                {
+                                    <form asp-controller="Enrolments" asp-action="Enrol" method="post" class="mt-2">
+                                        <input type="hidden" name="categoryId" value="@cat.CategoryId" />
+                                        <input type="hidden" name="eventId" value="@Model.EventId" />
+                                        <button type="submit" class="btn btn-sm btn-success">Enrol Now</button>
+                                    </form>
+                                }
+                                else if (token == null)
+                                {
+                                    <small class="text-muted fst-italic">Login to enrol</small>
+                                }
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <div class="p-3 text-muted text-center">No categories available yet.</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

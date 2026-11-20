@@ -1,0 +1,39 @@
+﻿@model List<RaceDay.MVC.Models.EventViewModel>
+
+@{
+    ViewData["Title"] = "Upcoming Events";
+}
+
+<div class="text-center mb-4">
+    <h1 class="display-4 fw-bold text-danger">Upcoming Races</h1>
+    <p class="lead">Find your next challenge and register today!</p>
+</div>
+
+<div class="row">
+    @if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow h-100 border-0">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold text-danger">@item.EventName</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@item.EventType | @item.Location</h6>
+                        <p class="card-text mt-3">@item.Description</p>
+                        <p class="card-text"><small class="text-muted">📅 @item.EventDate.ToString("dd MMM yyyy")</small></p>
+                    </div>
+                    <div class="card-footer bg-white border-0 pb-3">
+                        <!-- UPDATED LINK HERE -->
+                        <a asp-action="Details" asp-route-id="@item.EventId" class="btn btn-race w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12 text-center">
+            <p class="text-muted">No upcoming events found.</p>
+        </div>
+    }
+</div>
